@@ -23,7 +23,7 @@ export default function EditEventPage({ evt }) {
     time: evt.time,
     description: evt.description,
   });
-  const [imagePreview, setImagePreview] = useState(evt.image ? evt.image.formats.thumbnail.url : null);
+  const [imagePreview, setImagePreview] = useState(evt?.image?.formats?.thumbnail?.url ? evt.image.formats.thumbnail.url : null);
   const [showModal, setShowModal] = useState(false);
   const router = useRouter();
   const handleSubmit = async (e) => {
