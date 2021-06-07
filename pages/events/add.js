@@ -8,6 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function AddEventsPage() {
+  const [selectedFile, setFile] = useState('');
   const [values, setValues] = useState({
     name: '',
     performers: '',
@@ -51,11 +52,39 @@ export default function AddEventsPage() {
     setValues({ ...values, [name]: value });
   }
 
+  const uploadEvents = async (file) => {
+    const blob = await new Blob([file], { type: file.type }).arrayBuffer()
+    const res = await fetch(`${API_URL}/events/many`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: 'jon',
+        file: new Uint8Array(blob).toString(),
+      }),
+    });
+  }
+
+  const uploadEventsFile = (e) => {
+    const file = e.target.files[0];
+
+    setFile(file);
+
+    uploadEvents(file);
+
+    setFile('');
+  }
+
   return (
     <Layout tittle="Add Event">
-      <Link href='/events'>
-        <a>Go back</a>
-      </Link>
+      <div className="space-between">
+        <Link href='/events'>
+          <a>Go back</a>
+        </Link>
+        <input name="file" className="inputfile" value={selectedFile} type="file" onChange={uploadEventsFile} />
+        {/* <label className="inputFile" htmlFor="file">Choose JSON file to create Events</label> */}
+      </div>
       <h1>Add Event</h1>
       <ToastContainer />
       <form onSubmit={handleSubmit} className={styles.form}>
