@@ -11,12 +11,10 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => checkUserLoggedIn(), []);
 
-  // Register
   const register = async (user) => {
     console.log(user);
   }
 
-  // Login
   const login = async ({ email: identifier, password }) => {
     console.log({ identifier, password });
 
@@ -41,12 +39,17 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  // Logout
   const logout = async (user) => {
-    console.log(user);
+    const res = await fetch(`${NEXT_URL}/api/logout`, {
+      method: 'POST'
+    });
+
+    if (res.ok) {
+      setUser(null);
+      router.push('/');
+    }
   }
 
-  // Check if user is logged in
   const checkUserLoggedIn = async (user) => {
     const res = await fetch(`${NEXT_URL}/api/user`);
     const data = await res.json();
