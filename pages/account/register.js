@@ -1,7 +1,7 @@
 import { FaUser } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useState, useEffect, useCntext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import Link from 'next/link';
 import Layout from '@/components/Layout';
 import styles from '@/styles/AuthForm.module.css';
@@ -10,15 +10,18 @@ import AuthContext from '@/context/AuthContext';
 export default function LoginPage() {
   const [password, setPassword] = useState();
   const [email, setEmail] = useState();
+  const [username, setUsername] = useState();
   const [confirmPassword, setConfirmPassword] = useState();
-  const { error, register } = useCntext(AuthContext);
+  const { error, register } = useContext(AuthContext);
+
+  useEffect(() => error && toast.error(error))
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       return toast.error('Passwords do not match!!!');
     }
-    register({ email, password });
+    register({ username, email, password });
   };
 
   return (
@@ -30,6 +33,15 @@ export default function LoginPage() {
           </h1>
           <ToastContainer />
           <form onSubmit={handleSubmit}>
+            <div>
+              <label htmlFor='text'>Username</label>
+              <input
+                type='text'
+                id='text'
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </div>
             <div>
               <label htmlFor='email'>Email Address</label>
               <input
@@ -51,13 +63,13 @@ export default function LoginPage() {
             <div>
               <label htmlFor='confirm-password'>Confirm Password</label>
               <input
-                type='password'
+                type='password'AuthContext
                 id='confirm-password'
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
             </div>
-            <input type='submit' value='Login' className='btn' />
+            <input type='submit' value='Register' className='btn' />
           </form>
           <p>
             Don't have an account? <Link href='/account/register'>Register</Link>

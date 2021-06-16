@@ -32,7 +32,6 @@ export default function EditEventPage({ evt }) {
       (el) => el === ''
     );
 
-    console.log(values);
     if (hasEmptyFields) {
       toast.error('Please fill in all Fields');
       return;
